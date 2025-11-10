@@ -1,0 +1,175 @@
+# Pylontech Battery Card - Example Configurations
+
+# ==============================================================================
+# BASIC CONFIGURATION
+# ==============================================================================
+
+# Minimal setup for a single battery pack
+type: custom:pylontech-battery-card
+entity: sensor.pylontech_battery_pack_1_pack_voltage
+title: Battery Pack 1
+
+# ==============================================================================
+# FULL CONFIGURATION
+# ==============================================================================
+
+# All options enabled (default behavior)
+type: custom:pylontech-battery-card
+entity: sensor.pylontech_battery_pack_1_pack_voltage
+title: Battery Pack 1 - Full Details
+show_cells: true
+show_temperatures: true
+show_status: true
+
+# ==============================================================================
+# COMPACT CONFIGURATION
+# ==============================================================================
+
+# Only show main statistics (voltage, current, SOC, power)
+type: custom:pylontech-battery-card
+entity: sensor.pylontech_battery_pack_1_pack_voltage
+title: Battery Pack 1 - Compact
+show_cells: false
+show_temperatures: false
+show_status: false
+
+# ==============================================================================
+# MULTI-PACK VERTICAL LAYOUT
+# ==============================================================================
+
+# Display multiple packs in a vertical stack
+type: vertical-stack
+cards:
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_1_pack_voltage
+    title: Battery Pack 1
+
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_2_pack_voltage
+    title: Battery Pack 2
+
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_3_pack_voltage
+    title: Battery Pack 3
+
+# ==============================================================================
+# MULTI-PACK HORIZONTAL LAYOUT
+# ==============================================================================
+
+# Display multiple packs side-by-side (responsive grid)
+type: horizontal-stack
+cards:
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_1_pack_voltage
+    title: Pack 1
+    show_cells: false
+    show_temperatures: false
+
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_2_pack_voltage
+    title: Pack 2
+    show_cells: false
+    show_temperatures: false
+
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_3_pack_voltage
+    title: Pack 3
+    show_cells: false
+    show_temperatures: false
+
+# ==============================================================================
+# GRID LAYOUT
+# ==============================================================================
+
+# Display multiple packs in a responsive grid
+type: grid
+columns: 2
+square: false
+cards:
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_1_pack_voltage
+    title: Pack 1
+
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_2_pack_voltage
+    title: Pack 2
+
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_3_pack_voltage
+    title: Pack 3
+
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_4_pack_voltage
+    title: Pack 4
+
+# ==============================================================================
+# MONITORING VIEW
+# ==============================================================================
+
+# Cells and temperatures only (for detailed monitoring)
+type: custom:pylontech-battery-card
+entity: sensor.pylontech_battery_pack_1_pack_voltage
+title: Battery Pack 1 - Monitoring
+show_cells: true
+show_temperatures: true
+show_status: false
+
+# ==============================================================================
+# STATUS VIEW
+# ==============================================================================
+
+# Main stats and status only (for quick health check)
+type: custom:pylontech-battery-card
+entity: sensor.pylontech_battery_pack_1_pack_voltage
+title: Battery Pack 1 - Status
+show_cells: false
+show_temperatures: false
+show_status: true
+
+# ==============================================================================
+# CONDITIONAL DISPLAY
+# ==============================================================================
+
+# Only show card when battery is charging or discharging
+type: conditional
+conditions:
+  - entity: sensor.pylontech_battery_pack_1_power
+    state_not: "0"
+card:
+  type: custom:pylontech-battery-card
+  entity: sensor.pylontech_battery_pack_1_pack_voltage
+  title: Battery Pack 1 - Active
+
+# ==============================================================================
+# WITH OTHER CARDS
+# ==============================================================================
+
+# Combine with other cards in a layout
+type: vertical-stack
+cards:
+  # Title card
+  - type: markdown
+    content: |
+      # Battery System Overview
+      Monitoring 3 Pylontech battery packs
+
+  # Battery cards
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_1_pack_voltage
+    title: Pack 1
+
+  - type: custom:pylontech-battery-card
+    entity: sensor.pylontech_battery_pack_2_pack_voltage
+    title: Pack 2
+
+  - type: custom:pylontech-battery-pack_3_pack_voltage
+    title: Pack 3
+
+  # Total system stats
+  - type: entities
+    title: System Totals
+    entities:
+      - entity: sensor.total_battery_capacity
+        name: Total Capacity
+      - entity: sensor.total_battery_power
+        name: Total Power
