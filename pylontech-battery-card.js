@@ -149,7 +149,7 @@ class PylontechBatteryCard extends HTMLElement {
   }
 
   updateContent() {
-    if (!this._hass) return;
+    if (!this._hass || !this.config) return;
 
     const contentDiv = this.shadowRoot.getElementById('content');
     if (!contentDiv) return;
