@@ -2,7 +2,7 @@
 
 A comprehensive Lovelace card for monitoring Pylontech (SOK) BMS battery systems in Home Assistant.
 
-![Battery Overview Card](https://via.placeholder.com/800x500?text=Battery+Overview+Card+Screenshot)
+![Battery Overview Card](https://github.com/user-attachments/assets/9a9386ca-ebf8-436b-89da-85ba081ec7a0)
 
 ## Features
 
@@ -15,8 +15,8 @@ A comprehensive Lovelace card for monitoring Pylontech (SOK) BMS battery systems
 - **Pack Metrics** - Voltage, current, power, delta V, and temperature for each pack
 - **Visual Alerts** - Instant warnings for packs with alarms or faults
 
-![Temperature Heatmap](https://via.placeholder.com/800x400?text=Temperature+Heatmap+Screenshot)
-![Voltage Heatmap](https://via.placeholder.com/800x400?text=Voltage+Heatmap+Screenshot)
+![Temperature Heatmap](https://github.com/user-attachments/assets/9c9f6c4f-b832-4ecd-bf8e-c55b03290cea)
+![Voltage Heatmap](https://github.com/user-attachments/assets/34b7fda0-2a7b-4726-9dd8-030dde69ac83)
 
 ## Requirements
 
