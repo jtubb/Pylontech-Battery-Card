@@ -1,6 +1,6 @@
 # Pylontech Battery Card
 
-A comprehensive Lovelace card for monitoring Pylontech (SOK) BMS battery systems in Home Assistant.
+A comprehensive Lovelace card for monitoring Pylontech (SOK) BMS battery systems in Home Assistant. Designed to work with entites created by the Pylontech BMS Integration https://github.com/jtubb/HA-Pylontech-BMS but should work with any that follow similar naming convetions.
 
 ![Battery Overview Card](https://github.com/user-attachments/assets/9a9386ca-ebf8-436b-89da-85ba081ec7a0)
 
