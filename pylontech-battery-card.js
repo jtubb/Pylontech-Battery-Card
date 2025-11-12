@@ -1,3 +1,5 @@
+const CARD_VERSION = '2.0.0';
+
 class PylontechBatteryCard extends HTMLElement {
   constructor() {
     super();
@@ -351,7 +353,7 @@ window.customCards.push({
 });
 
 console.info(
-  '%c  PYLONTECH-BATTERY-CARD  %c Version 1.0.0 ',
+  `%c  PYLONTECH-BATTERY-CARD  %c Version ${CARD_VERSION} `,
   'color: white; background: green; font-weight: 700;',
   'color: green; background: white; font-weight: 700;'
 );
