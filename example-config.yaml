@@ -4,172 +4,169 @@
 # BASIC CONFIGURATION
 # ==============================================================================
 
-# Minimal setup for a single battery pack
-type: custom:pylontech-battery-card
-entity: sensor.pylontech_battery_pack_1_pack_voltage
-title: Battery Pack 1
+# Minimal setup for monitoring battery packs 1-5
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+start_index: 1
+end_index: 5
 
 # ==============================================================================
 # FULL CONFIGURATION
 # ==============================================================================
 
-# All options enabled (default behavior)
-type: custom:pylontech-battery-card
-entity: sensor.pylontech_battery_pack_1_pack_voltage
-title: Battery Pack 1 - Full Details
-show_cells: true
-show_temperatures: true
-show_status: true
+# All options with custom title
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+start_index: 1
+end_index: 5
+title: Battery System Overview
+show_system_overview: true
+show_packs: true
 
 # ==============================================================================
-# COMPACT CONFIGURATION
+# SYSTEM OVERVIEW ONLY
 # ==============================================================================
 
-# Only show main statistics (voltage, current, SOC, power)
-type: custom:pylontech-battery-card
-entity: sensor.pylontech_battery_pack_1_pack_voltage
-title: Battery Pack 1 - Compact
-show_cells: false
-show_temperatures: false
-show_status: false
+# Show only system totals without individual pack cards
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+start_index: 1
+end_index: 5
+title: System Statistics
+show_system_overview: true
+show_packs: false
 
 # ==============================================================================
-# MULTI-PACK VERTICAL LAYOUT
+# PACKS ONLY (NO SYSTEM OVERVIEW)
 # ==============================================================================
 
-# Display multiple packs in a vertical stack
+# Show individual packs without system overview section
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+start_index: 1
+end_index: 5
+title: Battery Packs
+show_system_overview: false
+show_packs: true
+
+# ==============================================================================
+# SINGLE PACK SYSTEM
+# ==============================================================================
+
+# For systems with only one battery pack
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+start_index: 1
+end_index: 1
+title: Single Battery Pack
+
+# ==============================================================================
+# LARGE SYSTEM (10+ PACKS)
+# ==============================================================================
+
+# For systems with many battery packs
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+start_index: 1
+end_index: 16
+title: Large Battery System
+
+# ==============================================================================
+# CUSTOM PACK RANGE
+# ==============================================================================
+
+# Monitor packs 3 through 8 only
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+start_index: 3
+end_index: 8
+title: Battery Rack 2
+
+# ==============================================================================
+# DIFFERENT ENTITY PREFIX
+# ==============================================================================
+
+# If your entities use a different prefix
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.pylontech_battery
+start_index: 1
+end_index: 4
+title: Pylontech System
+
+# ==============================================================================
+# MULTIPLE SYSTEMS
+# ==============================================================================
+
+# Monitor multiple battery systems on one dashboard
 type: vertical-stack
 cards:
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_1_pack_voltage
-    title: Battery Pack 1
+  # First battery rack
+  - type: custom:pylontech-battery-overview
+    entity_prefix: sensor.sok_rack_1
+    start_index: 1
+    end_index: 5
+    title: Rack 1 - Main System
 
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_2_pack_voltage
-    title: Battery Pack 2
-
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_3_pack_voltage
-    title: Battery Pack 3
+  # Second battery rack
+  - type: custom:pylontech-battery-overview
+    entity_prefix: sensor.sok_rack_2
+    start_index: 1
+    end_index: 3
+    title: Rack 2 - Backup System
 
 # ==============================================================================
-# MULTI-PACK HORIZONTAL LAYOUT
+# GRID LAYOUT (SIDE-BY-SIDE)
 # ==============================================================================
 
-# Display multiple packs side-by-side (responsive grid)
+# Display multiple systems side-by-side
 type: horizontal-stack
 cards:
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_1_pack_voltage
-    title: Pack 1
-    show_cells: false
-    show_temperatures: false
+  - type: custom:pylontech-battery-overview
+    entity_prefix: sensor.sok_rack_1
+    start_index: 1
+    end_index: 3
+    title: East Battery
 
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_2_pack_voltage
-    title: Pack 2
-    show_cells: false
-    show_temperatures: false
-
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_3_pack_voltage
-    title: Pack 3
-    show_cells: false
-    show_temperatures: false
-
-# ==============================================================================
-# GRID LAYOUT
-# ==============================================================================
-
-# Display multiple packs in a responsive grid
-type: grid
-columns: 2
-square: false
-cards:
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_1_pack_voltage
-    title: Pack 1
-
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_2_pack_voltage
-    title: Pack 2
-
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_3_pack_voltage
-    title: Pack 3
-
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_4_pack_voltage
-    title: Pack 4
-
-# ==============================================================================
-# MONITORING VIEW
-# ==============================================================================
-
-# Cells and temperatures only (for detailed monitoring)
-type: custom:pylontech-battery-card
-entity: sensor.pylontech_battery_pack_1_pack_voltage
-title: Battery Pack 1 - Monitoring
-show_cells: true
-show_temperatures: true
-show_status: false
-
-# ==============================================================================
-# STATUS VIEW
-# ==============================================================================
-
-# Main stats and status only (for quick health check)
-type: custom:pylontech-battery-card
-entity: sensor.pylontech_battery_pack_1_pack_voltage
-title: Battery Pack 1 - Status
-show_cells: false
-show_temperatures: false
-show_status: true
+  - type: custom:pylontech-battery-overview
+    entity_prefix: sensor.sok_rack_2
+    start_index: 1
+    end_index: 3
+    title: West Battery
 
 # ==============================================================================
 # CONDITIONAL DISPLAY
 # ==============================================================================
 
-# Only show card when battery is charging or discharging
+# Only show battery card when system is active
 type: conditional
 conditions:
-  - entity: sensor.pylontech_battery_pack_1_power
-    state_not: "0"
+  - entity: sensor.sok_rack_1_pack_1_pack_voltage
+    state_not: "unavailable"
 card:
-  type: custom:pylontech-battery-card
-  entity: sensor.pylontech_battery_pack_1_pack_voltage
-  title: Battery Pack 1 - Active
+  type: custom:pylontech-battery-overview
+  entity_prefix: sensor.sok_rack_1
+  start_index: 1
+  end_index: 5
+  title: Battery System
 
 # ==============================================================================
-# WITH OTHER CARDS
+# WITH MARKDOWN HEADER
 # ==============================================================================
 
-# Combine with other cards in a layout
+# Add descriptive header above battery card
 type: vertical-stack
 cards:
-  # Title card
   - type: markdown
     content: |
-      # Battery System Overview
-      Monitoring 3 Pylontech battery packs
+      # Solar Battery System
+      Real-time monitoring of 5 Pylontech US5000 battery packs
 
-  # Battery cards
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_1_pack_voltage
-    title: Pack 1
+      **Features:**
+      - Click temperature/voltage labels for heatmaps
+      - Click any metric to view history graph
+      - Real-time SOC and power monitoring
 
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_2_pack_voltage
-    title: Pack 2
-
-  - type: custom:pylontech-battery-pack_3_pack_voltage
-    title: Pack 3
-
-  # Total system stats
-  - type: entities
-    title: System Totals
-    entities:
-      - entity: sensor.total_battery_capacity
-        name: Total Capacity
-      - entity: sensor.total_battery_power
-        name: Total Power
+  - type: custom:pylontech-battery-overview
+    entity_prefix: sensor.sok_rack_1
+    start_index: 1
+    end_index: 5

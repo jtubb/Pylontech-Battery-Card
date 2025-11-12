@@ -1,42 +1,28 @@
 # Pylontech Battery Card
 
-Custom Lovelace cards for displaying Pylontech (SOK) BMS battery information in Home Assistant.
-
-## Cards
-
-This repository includes two cards for different use cases:
-
-### Battery Overview Card (Multi-Pack System View)
+A comprehensive Lovelace card for monitoring Pylontech (SOK) BMS battery systems in Home Assistant.
 
 ![Battery Overview Card](https://via.placeholder.com/800x500?text=Battery+Overview+Card+Screenshot)
 
-A comprehensive system-level card for monitoring multiple battery packs with:
-- **System Overview**: Total voltage, power, cycles, and time estimates
-- **Multi-Pack Display**: Visual overview of all battery packs with SOC indicators
-- **Interactive Heatmaps**: Click temperature or voltage labels to see cell-level heatmaps
-- **History Graphs**: Click any entity to view historical data with mini-graph-card
-- **Responsive Design**: Optimized layouts for desktop and mobile devices
-- **Real-time Monitoring**: Live updates of all pack metrics
+## Features
+
+- **System Overview** - Total voltage, power, average cycles, and time to empty/full estimates
+- **Multi-Pack Monitoring** - Display 1-16+ battery packs in a responsive grid layout
+- **Interactive Heatmaps** - Click temperature or voltage labels to view cell-level heatmaps
+- **History Graphs** - Click any metric to view historical data powered by mini-graph-card
+- **Real-time Updates** - Live monitoring with visual SOC indicators and color coding
+- **Responsive Design** - Optimized layouts for desktop, tablet, and mobile devices
+- **Pack Metrics** - Voltage, current, power, delta V, and temperature for each pack
+- **Visual Alerts** - Instant warnings for packs with alarms or faults
 
 ![Temperature Heatmap](https://via.placeholder.com/800x400?text=Temperature+Heatmap+Screenshot)
 ![Voltage Heatmap](https://via.placeholder.com/800x400?text=Voltage+Heatmap+Screenshot)
-![History Graph](https://via.placeholder.com/800x400?text=History+Graph+Screenshot)
-
-### Battery Card (Single Pack Detail View)
-
-![Battery Card](https://via.placeholder.com/800x400?text=Battery+Card+Screenshot)
-
-A detailed card for individual battery pack monitoring with:
-- **Main Stats Display**: Voltage, current, state of charge, and power
-- **Cell Voltage Monitoring**: Individual cell voltages with min/max highlighting
-- **Temperature Monitoring**: Cell groups, MOSFET, and environment temperatures
-- **Status Indicators**: System, protection, fault, and alarm statuses with visual alerts
 
 ## Requirements
 
 - Home Assistant 2024.1.0 or newer
 - [Pylontech BMS Integration](https://github.com/jtubb/HA-Pylontech-BMS) installed and configured
-- [mini-graph-card](https://github.com/kalkih/mini-graph-card) (required for Battery Overview Card history graphs)
+- [mini-graph-card](https://github.com/kalkih/mini-graph-card) (required for history graphs)
 
 ## Installation
 
@@ -50,21 +36,39 @@ A detailed card for individual battery pack monitoring with:
 6. Select category: "Lovelace"
 7. Click "Add"
 8. Find "Pylontech Battery Card" in the list and click "Install"
-9. Install [mini-graph-card](https://github.com/kalkih/mini-graph-card) from HACS (required for overview card)
-10. Restart Home Assistant
+9. Install [mini-graph-card](https://github.com/kalkih/mini-graph-card) from HACS
+10. **Add the resource** (see below - this is required!)
+11. Clear your browser cache (Ctrl+Shift+R or Cmd+Shift+R)
+12. Restart Home Assistant
+
+#### Add Resource After HACS Installation
+
+**This step is required or you'll get "Custom element doesn't exist" error!**
+
+**Method 1: Via UI (Recommended)**
+1. Go to **Settings** → **Dashboards** → **Resources** (three-dot menu in top right)
+2. Click **"Add Resource"**
+3. URL: `/hacsfiles/pylontech-battery-card/pylontech-battery-overview.js`
+4. Type: **JavaScript Module**
+5. Click **"Create"**
+6. Clear browser cache (Ctrl+Shift+R)
+
+**Method 2: Via configuration.yaml**
+```yaml
+lovelace:
+  resources:
+    - url: /hacsfiles/pylontech-battery-card/pylontech-battery-overview.js
+      type: module
+```
 
 ### Manual Installation
 
-1. Download the card files from the [latest release](https://github.com/jtubb/pylontech-battery-card/releases):
-   - `pylontech-battery-overview.js` (multi-pack system view)
-   - `pylontech-battery-card.js` (single pack detail view)
-2. Copy the files to `config/www/` directory (create if it doesn't exist)
+1. Download `pylontech-battery-overview.js` from the [latest release](https://github.com/jtubb/pylontech-battery-card/releases)
+2. Copy the file to `config/www/` directory
 3. Install [mini-graph-card](https://github.com/kalkih/mini-graph-card) manually
-4. Add the following to your Lovelace resources:
+4. Add to your Lovelace resources:
    ```yaml
    - url: /local/pylontech-battery-overview.js
-     type: module
-   - url: /local/pylontech-battery-card.js
      type: module
    - url: /local/mini-graph-card-bundle.js
      type: module
@@ -73,19 +77,16 @@ A detailed card for individual battery pack monitoring with:
 
 ## Configuration
 
-### Battery Overview Card (Multi-Pack System View)
-
-#### Basic Configuration
+### Basic Configuration
 
 ```yaml
 type: custom:pylontech-battery-overview
 entity_prefix: sensor.sok_rack_1
 start_index: 1
 end_index: 5
-title: Battery System Overview
 ```
 
-#### Full Configuration
+### Full Configuration
 
 ```yaml
 type: custom:pylontech-battery-overview
@@ -97,7 +98,7 @@ show_system_overview: true
 show_packs: true
 ```
 
-#### Configuration Options
+### Configuration Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
@@ -108,9 +109,9 @@ show_packs: true
 | `show_system_overview` | boolean | `true` | Show system overview section with totals |
 | `show_packs` | boolean | `true` | Show individual pack cards |
 
-#### Entity Naming Convention
+### Entity Naming Convention
 
-The overview card expects entities to follow this naming pattern:
+The card expects entities to follow this naming pattern:
 ```
 {entity_prefix}_pack_{N}_{metric}
 ```
@@ -121,40 +122,9 @@ Examples:
 - `sensor.sok_rack_1_pack_1_temperature_cells_1_4`
 - `sensor.sok_rack_1_pack_1_cell_0_voltage`
 
-### Battery Card (Single Pack Detail View)
+## Usage Examples
 
-#### Basic Configuration
-
-```yaml
-type: custom:pylontech-battery-card
-entity: sensor.pylontech_battery_pack_1_pack_voltage
-title: Battery Pack 1
-```
-
-#### Full Configuration
-
-```yaml
-type: custom:pylontech-battery-card
-entity: sensor.pylontech_battery_pack_1_pack_voltage
-title: Battery Pack 1
-show_cells: true
-show_temperatures: true
-show_status: true
-```
-
-#### Configuration Options
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `entity` | string | **required** | Main pack voltage sensor entity ID |
-| `title` | string | `Battery Status` | Card title |
-| `show_cells` | boolean | `true` | Show individual cell voltages |
-| `show_temperatures` | boolean | `true` | Show temperature sensors |
-| `show_status` | boolean | `true` | Show status indicators |
-
-## Examples
-
-### System Overview with Multiple Packs
+### Multiple Battery Packs
 
 ```yaml
 type: custom:pylontech-battery-overview
@@ -164,7 +134,39 @@ end_index: 5
 title: Main Battery System
 ```
 
-### Combined View (Overview + Detail Cards)
+### Single Pack System
+
+```yaml
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+start_index: 1
+end_index: 1
+title: Battery Pack
+```
+
+### System Overview Only (No Individual Packs)
+
+```yaml
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+start_index: 1
+end_index: 5
+title: System Statistics
+show_system_overview: true
+show_packs: false
+```
+
+### Large System (10+ Packs)
+
+```yaml
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+start_index: 1
+end_index: 16
+title: Large Battery System
+```
+
+### Multiple Battery Systems
 
 ```yaml
 type: vertical-stack
@@ -173,109 +175,91 @@ cards:
     entity_prefix: sensor.sok_rack_1
     start_index: 1
     end_index: 5
-    title: Battery System Overview
-  - type: custom:pylontech-battery-card
-    entity: sensor.pylontech_battery_pack_1_pack_voltage
-    title: Pack 1 - Detailed View
+    title: Rack 1 - Main System
+
+  - type: custom:pylontech-battery-overview
+    entity_prefix: sensor.sok_rack_2
+    start_index: 1
+    end_index: 3
+    title: Rack 2 - Backup System
 ```
 
-### Single Pack Only
+## Interactive Features
 
-```yaml
-type: custom:pylontech-battery-card
-entity: sensor.pylontech_battery_pack_1_pack_voltage
-title: Battery Pack 1
-show_cells: true
-show_temperatures: true
-show_status: true
-```
+### Heatmaps
+- **Temperature Heatmap**: Click the "Temperature" label in any pack card to view cell temperature distribution
+- **Voltage Heatmap**: Click the "Delta V" label to view cell voltage distribution
+- **Cell History**: Click any individual cell in the heatmap to view its history graph
 
-### Compact System View
-
-```yaml
-type: custom:pylontech-battery-overview
-entity_prefix: sensor.sok_rack_1
-start_index: 1
-end_index: 3
-title: Battery System
-show_system_overview: true
-```
-
-## Features
-
-### Battery Overview Card Features
-
-- **System Statistics**: View total system voltage, power consumption/generation, average cycles, and time to empty/full
-- **Multi-Pack Monitoring**: Display multiple battery packs (1-16+) in a responsive grid layout
-- **State of Charge Visualization**: Visual SOC indicators with color coding (low/medium/normal)
-- **Pack Metrics**: Voltage, current, power, delta V, and temperature for each pack
-- **Interactive Heatmaps**:
-  - Click "Temperature" label to view cell temperature heatmap
-  - Click "Delta V" label to view cell voltage heatmap
-  - Color-coded cells show min/max values
-  - Click any cell to view its history graph
-- **History Graphs**:
-  - Powered by mini-graph-card
-  - Zoom controls (1h, 3h, 6h, 12h, 24h)
-  - Click any system stat or pack metric to view history
-- **Alert Indicators**: Visual warnings for packs with alarms or faults
-- **Responsive Design**: Optimized layouts for desktop, tablet, and mobile devices
-- **Real-time Updates**: Live data refresh from Home Assistant
-
-### Battery Card Features
-
-- **Main Statistics**: Voltage, current, state of charge, power
-- **Cell Voltage Grid**: Individual cell voltages with min/max highlighting
-- **Temperature Monitoring**: Cell groups, MOSFET, and environment sensors
-- **Status Indicators**: System, protection, fault, and alarm statuses
-- **Visual Alerts**: Highlight cells and statuses that need attention
-- **Customizable Display**: Show/hide sections as needed
+### History Graphs
+- Click any system metric (voltage, power, cycles, etc.) to view its history
+- Click any pack metric to view that pack's history
+- Zoom controls: 1h, 3h, 6h, 12h, 24h intervals
+- Powered by mini-graph-card for smooth, interactive graphs
 
 ## Visual Indicators
 
-### Overview Card
+### State of Charge (SOC) Colors
+- **Red** (< 20%): Critical low battery
+- **Orange** (20-50%): Low battery
+- **Normal** (> 50%): Adequate charge
 
-- **SOC Colors**:
-  - Red: < 20%
-  - Orange: 20-50%
-  - Normal: > 50%
-- **Pack Alerts**: Red border and warning icon for packs with active alarms
-- **Heatmap Colors**: Gradient from blue (low) to red (high)
-- **System Health**: Green checkmark or red warning icon
+### Pack Alerts
+- **Red border + warning icon**: Pack has active alarms or faults
+- Click the pack for detailed information
 
-### Detail Card
+### Heatmap Colors
+- **Blue**: Lower values (cooler temperature or lower voltage)
+- **Yellow/Orange**: Medium values
+- **Red**: Higher values (warmer temperature or higher voltage)
 
-- **Cell Voltages**:
-  - Normal: Default border
-  - Lowest: Red border
-  - Highest: Orange border
-- **Status Indicators**:
-  - Normal: Default appearance
-  - Alert: Red border and background
+### System Health
+- **Green checkmark**: All systems normal
+- **Red warning icon**: One or more packs have issues
 
 ## Troubleshooting
+
+### "Custom element doesn't exist" Error
+
+**This is the most common issue after HACS installation.**
+
+The JavaScript file hasn't been loaded as a resource.
+
+**Solution:**
+1. Go to **Settings** → **Dashboards** → **Resources** (click three dots in top right)
+2. Verify resource is added: `/hacsfiles/pylontech-battery-card/pylontech-battery-overview.js`
+3. If missing, click "Add Resource" and add it (Type: JavaScript Module)
+4. Clear browser cache (Ctrl+Shift+R or Cmd+Shift+R)
+5. Refresh the page
+
+**Verify files exist:**
+```bash
+ls /config/www/community/pylontech-battery-card/
+```
+You should see `pylontech-battery-overview.js`. If missing, reinstall from HACS.
 
 ### Card Not Showing
 
 1. Verify the Pylontech BMS integration is installed and working
-2. Check that sensors are available in Developer Tools → States
-3. Clear browser cache (Ctrl+Shift+R or Cmd+Shift+R)
-4. Verify the cards are added to Lovelace resources
-5. For overview card: Ensure mini-graph-card is installed
+2. Check sensors exist in **Developer Tools** → **States**
+3. Verify mini-graph-card is installed from HACS
+4. Clear browser cache (Ctrl+Shift+R or Cmd+Shift+R)
+5. Check browser console for errors (F12 → Console tab)
+6. Verify the resource is loaded (see above)
 
 ### Entity Not Found
 
-1. Check entity ID format matches your integration
-2. Verify entity prefix is correct (e.g., `sensor.sok_rack_1`)
-3. Verify entity exists in Developer Tools → States
-4. Check pack numbering matches your actual packs
+1. Check entity prefix is correct (e.g., `sensor.sok_rack_1`)
+2. Verify entities exist in **Developer Tools** → **States**
+3. Check pack numbering matches your actual packs
+4. Ensure entities follow the naming pattern: `{prefix}_pack_{N}_{metric}`
 
 ### History Graphs Not Working
 
 1. Ensure mini-graph-card is installed from HACS
-2. Verify mini-graph-card is added to Lovelace resources
+2. Verify mini-graph-card is in Lovelace resources
 3. Check browser console for errors (F12)
-4. Verify entity has recorded history data
+4. Verify entities have recorded history data in Home Assistant
 
 ### Heatmap Not Displaying
 
@@ -284,20 +268,25 @@ show_system_overview: true
 3. Ensure entities have valid numeric values
 4. Check browser console for errors
 
+### Slow Performance
+
+1. Reduce number of packs displayed (split into multiple cards)
+2. Disable heatmaps by not clicking labels
+3. Check Home Assistant system resources
+4. Verify network connection is stable
+
 ## Development
 
 ### Local Development
 
 1. Clone the repository
-2. Make changes to the card files:
-   - `pylontech-battery-overview.js` for multi-pack system view
-   - `pylontech-battery-card.js` for single pack detail view
+2. Make changes to `pylontech-battery-overview.js`
 3. Copy to `config/www/` for testing
 4. Refresh browser cache to see changes
 
-### Building from Source
+### Building
 
-These cards are written in vanilla JavaScript and don't require a build step. Simply edit the `.js` files directly.
+This card is written in vanilla JavaScript and doesn't require a build step. Simply edit the `.js` file directly.
 
 ### Testing
 
@@ -328,10 +317,16 @@ MIT License - see LICENSE file for details
 
 ## Credits
 
-- Created for use with the [Pylontech BMS Integration](https://github.com/jtubb/HA-Pylontech-BMS) for Home Assistant
+- Created for use with the [Pylontech BMS Integration](https://github.com/jtubb/HA-Pylontech-BMS)
 - History graphs powered by [mini-graph-card](https://github.com/kalkih/mini-graph-card) by @kalkih
 
 ## Changelog
+
+### Version 2.1.0
+- **Simplified**: Removed single-pack card, overview card now handles all use cases
+- Improved documentation and troubleshooting guides
+- Clearer HACS installation instructions
+- Better example configurations
 
 ### Version 2.0.0
 - Added Battery Overview Card for multi-pack system monitoring
@@ -339,4 +334,3 @@ MIT License - see LICENSE file for details
 - Added interactive temperature and voltage heatmaps
 - Implemented responsive design for mobile and desktop
 - Added system-level statistics (total power, cycles, time estimates)
-- Optimized layout spacing and removed unnecessary icons

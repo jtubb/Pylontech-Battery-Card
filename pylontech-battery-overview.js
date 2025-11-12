@@ -1,4 +1,4 @@
-const CARD_VERSION = '2.0.0';
+const CARD_VERSION = '2.1.0';
 
 class PylontechBatteryOverview extends HTMLElement {
   constructor() {
