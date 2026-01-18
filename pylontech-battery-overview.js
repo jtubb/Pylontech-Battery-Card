@@ -6,7 +6,7 @@
  * @author jtubb
  */
 
-const CARD_VERSION = '3.0.6';
+const CARD_VERSION = '3.0.8';
 
 console.info(
   `%c PYLONTECH-BATTERY-OVERVIEW %c v${CARD_VERSION} %c ISA-101 `,
@@ -126,11 +126,16 @@ class PylontechBatteryOverview extends HTMLElement {
         /* System Overview */
         .system-overview {
           display: flex;
+          flex-direction: column;
           gap: 6px;
           background: var(--isa-bg-panel);
           border: 1px solid var(--isa-border);
           padding: 10px;
           margin-bottom: 8px;
+        }
+        .system-stats-row {
+          display: flex;
+          gap: 6px;
         }
         .system-stat {
           flex: 1;
@@ -159,6 +164,25 @@ class PylontechBatteryOverview extends HTMLElement {
           font-size: 11px;
           color: var(--isa-text-dim);
           margin-left: 2px;
+        }
+
+        /* Time Estimate Row */
+        .time-estimate-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: var(--isa-bg);
+          border: 1px solid var(--isa-border);
+          padding: 8px 10px;
+        }
+        .time-estimate-label {
+          font-size: 12px;
+          color: var(--isa-text-dim);
+        }
+        .time-estimate-value {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--isa-text);
         }
 
         /* Pack Grid */
@@ -629,30 +653,32 @@ class PylontechBatteryOverview extends HTMLElement {
 
     let html = `
       <div class="system-overview">
-        <div class="system-stat" data-entity="${systemVoltageEntity}">
-          <div class="system-label">Voltage</div>
-          <div class="system-value">${systemVoltage}<span class="system-unit">V</span></div>
-        </div>
-        <div class="system-stat" data-entity="${totalPowerEntity}">
-          <div class="system-label">Power</div>
-          <div class="system-value">${Math.round(totalPower)}<span class="system-unit">W</span></div>
-        </div>
-        <div class="system-stat">
-          <div class="system-label">Status</div>
-          <div class="system-value"><span class="flow-indicator ${flowState.class}">${flowState.text}</span></div>
-        </div>
-        ${averageCycles > 0 ? `
-        <div class="system-stat">
-          <div class="system-label">Cycles</div>
-          <div class="system-value">${averageCycles}</div>
-        </div>
-        ` : ''}
         ${timeEstimate ? `
-        <div class="system-stat">
-          <div class="system-label">Estimate</div>
-          <div class="system-value" style="font-size: 14px;">${timeEstimate}</div>
+        <div class="time-estimate-row">
+          <span class="time-estimate-label">Estimated Time to ${totalCurrent >= 0 ? 'Full' : 'Empty'}:</span>
+          <span class="time-estimate-value">${timeEstimate.replace(/^(Full|Empty): /, '')}</span>
         </div>
         ` : ''}
+        <div class="system-stats-row">
+          <div class="system-stat" data-entity="${systemVoltageEntity}">
+            <div class="system-label">Voltage</div>
+            <div class="system-value">${systemVoltage}<span class="system-unit">V</span></div>
+          </div>
+          <div class="system-stat" data-entity="${totalPowerEntity}">
+            <div class="system-label">Power</div>
+            <div class="system-value">${Math.round(totalPower)}<span class="system-unit">W</span></div>
+          </div>
+          <div class="system-stat">
+            <div class="system-label">Status</div>
+            <div class="system-value"><span class="flow-indicator ${flowState.class}">${flowState.text}</span></div>
+          </div>
+          ${averageCycles > 0 ? `
+          <div class="system-stat">
+            <div class="system-label">Cycles</div>
+            <div class="system-value">${averageCycles}</div>
+          </div>
+          ` : ''}
+        </div>
       </div>
     `;
 
