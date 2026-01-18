@@ -1,19 +1,21 @@
 # Pylontech Battery Card
 
-A comprehensive Lovelace card for monitoring Pylontech (SOK) BMS battery systems in Home Assistant. Designed to work with entites created by the Pylontech BMS Integration https://github.com/jtubb/HA-Pylontech-BMS but should work with any that follow similar naming convetions.
+A comprehensive Lovelace card for monitoring Pylontech (SOK) BMS battery systems in Home Assistant, designed according to **ISA-101 Human Machine Interface standards** for optimal readability and situational awareness. Works with entities created by the [Pylontech BMS Integration](https://github.com/jtubb/HA-Pylontech-BMS) but should work with any that follow similar naming conventions.
 
 ![Battery Overview Card](https://github.com/user-attachments/assets/9a9386ca-ebf8-436b-89da-85ba081ec7a0)
 
 ## Features
 
+- **ISA-101 Compliant Design** - Industrial HMI color standards for clear status indication
 - **System Overview** - Total voltage, power, average cycles, and time to empty/full estimates
 - **Multi-Pack Monitoring** - Display 1-16+ battery packs in a responsive grid layout
 - **Interactive Heatmaps** - Click temperature or voltage labels to view cell-level heatmaps
 - **History Graphs** - Click any metric to view historical data powered by mini-graph-card
-- **Real-time Updates** - Live monitoring with visual SOC indicators and color coding
+- **Configurable Thresholds** - Set custom warning/alarm levels for SOC, temperature, and delta-V
+- **Real-time Updates** - Live monitoring with visual SOC indicators and status colors
 - **Responsive Design** - Optimized layouts for desktop, tablet, and mobile devices
 - **Pack Metrics** - Voltage, current, power, delta V, and temperature for each pack
-- **Visual Alerts** - Instant warnings for packs with alarms or faults
+- **Visual Alerts** - Color-coded warnings using ISA-101 status indicators
 
 ![Temperature Heatmap](https://github.com/user-attachments/assets/9c9f6c4f-b832-4ecd-bf8e-c55b03290cea)
 ![Voltage Heatmap](https://github.com/user-attachments/assets/34b7fda0-2a7b-4726-9dd8-030dde69ac83)
@@ -82,8 +84,7 @@ lovelace:
 ```yaml
 type: custom:pylontech-battery-overview
 entity_prefix: sensor.sok_rack_1
-start_index: 1
-end_index: 5
+pack_count: 5
 ```
 
 ### Full Configuration
@@ -91,11 +92,16 @@ end_index: 5
 ```yaml
 type: custom:pylontech-battery-overview
 entity_prefix: sensor.sok_rack_1
+pack_count: 5
 start_index: 1
-end_index: 5
-title: Battery System Overview
-show_system_overview: true
-show_packs: true
+title: BATTERY SYSTEM
+# ISA-101 Threshold Configuration
+soc_warning: 30      # SOC % below which shows warning (amber)
+soc_alarm: 15        # SOC % below which shows alarm (red)
+temp_warning: 40     # Temperature °C above which shows warning
+temp_alarm: 50       # Temperature °C above which shows alarm
+delta_v_warning: 30  # Delta-V mV above which shows warning
+delta_v_alarm: 50    # Delta-V mV above which shows alarm
 ```
 
 ### Configuration Options
@@ -103,11 +109,15 @@ show_packs: true
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `entity_prefix` | string | **required** | Entity prefix for your battery system (e.g., `sensor.sok_rack_1`) |
+| `pack_count` | number | `6` | Number of packs to display |
 | `start_index` | number | `1` | Starting pack number to display |
-| `end_index` | number | **required** | Ending pack number to display |
-| `title` | string | `Battery System Overview` | Card title |
-| `show_system_overview` | boolean | `true` | Show system overview section with totals |
-| `show_packs` | boolean | `true` | Show individual pack cards |
+| `title` | string | `BATTERY SYSTEM` | Card title |
+| `soc_warning` | number | `30` | SOC % threshold for warning state (amber) |
+| `soc_alarm` | number | `15` | SOC % threshold for alarm state (red) |
+| `temp_warning` | number | `40` | Temperature °C threshold for warning |
+| `temp_alarm` | number | `50` | Temperature °C threshold for alarm |
+| `delta_v_warning` | number | `30` | Delta-V mV threshold for warning |
+| `delta_v_alarm` | number | `50` | Delta-V mV threshold for alarm |
 
 ### Entity Naming Convention
 
@@ -129,9 +139,8 @@ Examples:
 ```yaml
 type: custom:pylontech-battery-overview
 entity_prefix: sensor.sok_rack_1
-start_index: 1
-end_index: 5
-title: Main Battery System
+pack_count: 5
+title: MAIN BATTERY SYSTEM
 ```
 
 ### Single Pack System
@@ -139,21 +148,8 @@ title: Main Battery System
 ```yaml
 type: custom:pylontech-battery-overview
 entity_prefix: sensor.sok_rack_1
-start_index: 1
-end_index: 1
-title: Battery Pack
-```
-
-### System Overview Only (No Individual Packs)
-
-```yaml
-type: custom:pylontech-battery-overview
-entity_prefix: sensor.sok_rack_1
-start_index: 1
-end_index: 5
-title: System Statistics
-show_system_overview: true
-show_packs: false
+pack_count: 1
+title: BATTERY PACK
 ```
 
 ### Large System (10+ Packs)
@@ -161,9 +157,8 @@ show_packs: false
 ```yaml
 type: custom:pylontech-battery-overview
 entity_prefix: sensor.sok_rack_1
-start_index: 1
-end_index: 16
-title: Large Battery System
+pack_count: 16
+title: LARGE BATTERY SYSTEM
 ```
 
 ### Multiple Battery Systems
@@ -173,15 +168,28 @@ type: vertical-stack
 cards:
   - type: custom:pylontech-battery-overview
     entity_prefix: sensor.sok_rack_1
-    start_index: 1
-    end_index: 5
-    title: Rack 1 - Main System
+    pack_count: 5
+    title: RACK 1 - MAIN SYSTEM
 
   - type: custom:pylontech-battery-overview
     entity_prefix: sensor.sok_rack_2
-    start_index: 1
-    end_index: 3
-    title: Rack 2 - Backup System
+    pack_count: 3
+    title: RACK 2 - BACKUP SYSTEM
+```
+
+### Custom Thresholds for High-Performance Systems
+
+```yaml
+type: custom:pylontech-battery-overview
+entity_prefix: sensor.sok_rack_1
+pack_count: 6
+title: HIGH PERFORMANCE SYSTEM
+soc_warning: 25
+soc_alarm: 10
+temp_warning: 35
+temp_alarm: 45
+delta_v_warning: 20
+delta_v_alarm: 40
 ```
 
 ## Interactive Features
@@ -199,23 +207,35 @@ cards:
 
 ## Visual Indicators
 
-### State of Charge (SOC) Colors
-- **Red** (< 20%): Critical low battery
-- **Orange** (20-50%): Low battery
-- **Normal** (> 50%): Adequate charge
+### ISA-101 Status Colors
 
-### Pack Alerts
-- **Red border + warning icon**: Pack has active alarms or faults
-- Click the pack for detailed information
+The card follows ISA-101 Human Machine Interface standards for status indication:
+
+| Status | Color | Meaning |
+|--------|-------|---------|
+| **Normal** | Gray (#808080) | Operating within normal parameters |
+| **Abnormal** | Blue (#0088cc) | Deviation from normal, attention needed |
+| **Warning** | Amber (#cc8800) | Approaching limits, action recommended |
+| **Alarm** | Red (#cc0000) | Critical condition, immediate action required |
+
+### State of Charge (SOC) Indicators
+- **Red** (below `soc_alarm`): Critical - immediate attention required
+- **Amber** (below `soc_warning`): Warning - charge recommended
+- **Gray** (normal): Operating normally
+
+### Temperature & Delta-V Indicators
+- Values are color-coded based on configured thresholds
+- Configurable warning and alarm levels per system requirements
+
+### Pack Status
+- **Red header**: Pack has active alarms or critical conditions
+- **Amber header**: Pack requires attention
+- **Gray header**: Pack operating normally
 
 ### Heatmap Colors
-- **Blue**: Lower values (cooler temperature or lower voltage)
-- **Yellow/Orange**: Medium values
-- **Red**: Higher values (warmer temperature or higher voltage)
-
-### System Health
-- **Green checkmark**: All systems normal
-- **Red warning icon**: One or more packs have issues
+- **Cool (blue)**: Lower values
+- **Neutral (green/yellow)**: Mid-range values
+- **Hot (red)**: Higher values approaching limits
 
 ## Troubleshooting
 
@@ -321,6 +341,15 @@ MIT License - see LICENSE file for details
 - History graphs powered by [mini-graph-card](https://github.com/kalkih/mini-graph-card) by @kalkih
 
 ## Changelog
+
+### Version 3.0.0
+- **ISA-101 Redesign**: Complete rewrite following ISA-101 Human Machine Interface standards
+- **Industrial Color Palette**: Neutral gray background with status-specific colors (gray/blue/amber/red)
+- **Flat Design**: Removed gradients and shadows for cleaner industrial appearance
+- **Configurable Thresholds**: User-configurable warning/alarm levels for SOC, temperature, and delta-V
+- **Improved Readability**: High-contrast text and clear status indicators
+- **Simplified Configuration**: Changed `end_index` to `pack_count` for easier setup
+- **Enhanced Status Visualization**: Color-coded values based on ISA-101 status categories
 
 ### Version 2.1.0
 - **Simplified**: Removed single-pack card, overview card now handles all use cases
