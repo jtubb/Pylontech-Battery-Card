@@ -2,7 +2,7 @@
 
 A comprehensive Lovelace card for monitoring Pylontech (SOK) BMS battery systems in Home Assistant, designed according to **ISA-101 Human Machine Interface standards** for optimal readability and situational awareness. Works with entities created by the [Pylontech BMS Integration](https://github.com/jtubb/HA-Pylontech-BMS) but should work with any that follow similar naming conventions.
 
-![Battery Overview Card](https://github.com/user-attachments/assets/9a9386ca-ebf8-436b-89da-85ba081ec7a0)
+![Battery Overview Card](screenshot.png)
 
 ## Features
 
